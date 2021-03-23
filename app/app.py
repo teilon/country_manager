@@ -6,7 +6,7 @@ from db import db, SQLALCHEMY_DATABASE_URI
 from resources.home import Home
 from resources.login import Login
 from resources.logout import Logout
-from resources.item import Item
+from resources.item import Item, ItemList
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
@@ -23,6 +23,7 @@ api.add_resource(Home, '/')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(Item, '/item/<string:name>')
+api.add_resource(ItemList, '/items')
 
 
 if __name__ == '__main__':

@@ -48,3 +48,11 @@ class Item(Resource):
             return {'message': 'An error occurred inserting the item'}, 500 
         
         return item.json(), 201
+
+class ItemList(Resource):
+
+    def get(self):
+        items = ItemModel.query.all()
+        if items:
+            return [x.json() for x in items], 200
+        return {'message': 'Objects list is empty/'}
