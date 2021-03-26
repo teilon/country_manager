@@ -1,58 +1,63 @@
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, request
 
 from models.item import ItemModel
+from schemas.item import ItemSchema
+
+NAME_ALREADY_EXISTS = 'An item with name {} already exists.'
+ITEM_NOT_FOUND = 'Item not found.'
+ERROR_INSERTING ='An error occurred inserting the item.'
+ITEM_DELETED = 'Item {} deleted'
+
+item_schema = ItemSchema()
+item_list_schema = ItemSchema(many=True)
 
 class Item(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument('population', type=int, required=True)
-
     def get(self, name):
         item = ItemModel.find_by_name(name)
         if item:
-            return item.json(), 200
-        return {'message': 'This field cannot be left blank!'}, 404
+            return item_schema.dump(item), 200
+        return {'message': ITEM_NOT_FOUND}, 404
     
     def post(self, name):
         if ItemModel.find_by_name(name):
-            return {'message': f'An item with name {name} already exists.'}, 400
+            return {'message': NAME_ALREADY_EXISTS.format(name)}, 400
         
-        data = Item.parser.parse_args()
-        new_item = ItemModel(name, data['population'])
+        data = request.get_json()
+        data['name'] = name
+        item = item_schema.load(data)
 
         try:
-            new_item.save_to_db()
+            item.save_to_db()
         except:
-            return {'message': 'An error occurred inserting the item'}, 500 
+            return {'message': ERROR_INSERTING}, 500 
         
-        return new_item.json(), 201
+        return item_schemam.dump(item), 201
     
     def delete(self, name):
         item = ItemModel.find_by_name(name)
         if item:
             item.delete_from_db()
         
-        return {'message': "Item deleted"}
+        return {'message': ITEM_DELETED.frmat(name)}
     
     def put(self, name):
-        data = Item.parser.parse_args()
-        
+        item_json = request.get_json()
         item = ItemModel.find_by_name(name)
-        if item is None:
-            item = ItemModel(name, c)
+
+        if item:
+            item.population = item_json['population']
         else:
-            item.population = data['population']     
+            item_json['name'] = name
+            item = item_schema.load(item_json)       
+      
+        item.save_to_db()
         
-        try:
-            item.save_to_db()
-        except:
-            return {'message': 'An error occurred inserting the item'}, 500 
-        
-        return item.json(), 201
+        return item_schema.dump(item), 200
 
 class ItemList(Resource):
 
     def get(self):
-        items = ItemModel.query.all()
+        items = item_list_schema.dump(ItemModel.find_all())
         if items:
-            return [x.json() for x in items], 200
-        return {'message': 'Objects list is empty/'}
+            return {'items': items}, 200
+        return {'message': 'Objects list is empty/'}, 200

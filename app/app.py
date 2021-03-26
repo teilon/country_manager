@@ -1,7 +1,9 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Api
+from marshmallow import ValidationError
 
 from db import db, SQLALCHEMY_DATABASE_URI
+from ma import ma
 
 from resources.home import Home
 from resources.login import Login
@@ -13,11 +15,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+ma.init_app(app)
 api = Api(app)
 
 @app.before_first_request
 def create_tables():
     db.create_all()
+
+@app.errorhandler(ValidationError)
+def handle_marshmallow_validation(err):
+    return jsonify(err.messages), 400
 
 api.add_resource(Home, '/')
 api.add_resource(Login, '/login')
@@ -28,3 +35,6 @@ api.add_resource(ItemList, '/items')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=True)
+
+
+# https://github.com/teilon/exch_manager/blob/master/schemas/item.py
