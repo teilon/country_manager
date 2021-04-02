@@ -12,10 +12,10 @@ POSTGRES_USER = 'thror' # os.environ['POSTGRES_USER']
 POSTGRES_PASSWORD = 'hammer' # os.environ['POSTGRES_PASSWORD']
 
 # connection = sqlite3.connect('data.db')
-SQLALCHEMY_DATABASE_URI = f'sqlite:///{SQLITE_DATABASE}'
-# SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.\
-#     format(POSTGRES_USER,
-#            POSTGRES_PASSWORD,
-#            POSTGRES_HOST,
-#            POSTGRES_PORT,
-#            POSTGRES_DATABASE)
+# SQLALCHEMY_DATABASE_URI = f'sqlite:///{SQLITE_DATABASE}'
+SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.\
+    format(POSTGRES_USER,
+           POSTGRES_PASSWORD,
+           POSTGRES_HOST,
+           POSTGRES_PORT,
+           POSTGRES_DATABASE)
