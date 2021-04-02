@@ -11,6 +11,7 @@ from resources.logout import Logout
 from resources.item import Item, ItemList
 from resources.country import Country, CountryList
 from resources.city import City, CityList
+from resources.region import Region, RegionList
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
@@ -37,6 +38,8 @@ api.add_resource(CountryList, '/countries')
 api.add_resource(Country, '/country/<string:name>')
 api.add_resource(CityList, '/cities')
 api.add_resource(City, '/city/<string:name>')
+api.add_resource(RegionList, '/regions')
+api.add_resource(Region, '/region/<string:name>')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=True)
