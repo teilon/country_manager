@@ -6,7 +6,7 @@ class CityModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), nullable=False)
-    population = db.Column(db.String(80), nullable=False)
+    population = db.Column(db.String(80), nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     
     country_id = db.Column(db.Integer, db.ForeignKey('countries.id', onupdate="CASCADE", ondelete="CASCADE"), nullable=False)

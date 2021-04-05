@@ -42,7 +42,9 @@ api.add_resource(RegionList, '/regions')
 api.add_resource(Region, '/region/<string:name>')
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=80, debug=True)    
+    # app.run(host='0.0.0.0', port=80, debug=True)
+    # app.run(host='127.0.0.1', port=5000, debug=True)
 
 
 # https://github.com/teilon/exch_manager/blob/master/schemas/item.py

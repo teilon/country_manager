@@ -56,5 +56,5 @@ class RegionList(Resource):
     def get(self):
         items = item_list_schema.dump(RegionModel.find_all())
         if items:
-            return {'cities': items}, 200
+            return {'regions': items}, 200
         return {'message': 'Objects list is empty.'}, 200
