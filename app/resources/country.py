@@ -12,19 +12,29 @@ item_schema = CountrySchema()
 item_list_schema = CountrySchema(many=True)
 
 class Country(Resource):
-    def get(self, name):
+    @classmethod
+    def get(cls, name):
         item = CountryModel.find_by_name(name)
         if item:
             return item_schema.dump(item), 200
         return {'message': ITEM_NOT_FOUND}, 404
     
-    def post(self, name):
+    @classmethod
+    def post(cls, name):
         if CountryModel.find_by_name(name):
             return {'message': NAME_ALREADY_EXISTS.format(name)}, 400
         
-        data = request.get_json()
+        try:
+            data = request.get_json()
+        except Exception:
+            return {'message': 'Data is empty.'}
         data['name'] = name
-        item = item_schema.load(data)
+
+        try:
+            item = item_schema.load(data)
+        except TypeError:
+            return {'message': 'Data is not correct.'}
+            
 
         try:
             item.save_to_db()
@@ -33,14 +43,16 @@ class Country(Resource):
         
         return item_schema.dump(item), 201
     
-    def delete(self, name):
+    @classmethod
+    def delete(cls, name):
         item = CountryModel.find_by_name(name)
         if item:
             item.delete_from_db()
         
         return {'message': ITEM_DELETED.format(name)}
     
-    def put(self, name):
+    @classmethod
+    def put(cls, name):
         item_json = request.get_json()
         item = CountryModel.find_by_name(name)
 
@@ -60,7 +72,8 @@ class Country(Resource):
 
 class CountryList(Resource):
 
-    def get(self):
+    @classmethod
+    def get(cls):
         items = item_list_schema.dump(CountryModel.find_all())
         if items:
             return {'countries': items}, 200

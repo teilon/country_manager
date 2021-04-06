@@ -14,13 +14,15 @@ item_schema = CitySchema()
 item_list_schema = CitySchema(many=True)
 
 class City(Resource):
-    def get(self, name):
+    @classmethod
+    def get(cls, name):
         item = CityModel.find_by_name(name)
         if item:
             return item_schema.dump(item), 200
         return {'message': ITEM_NOT_FOUND}, 404
     
-    def post(self, name):
+    @classmethod
+    def post(cls, name):
         if CityModel.find_by_name(name):
             return {'message': NAME_ALREADY_EXISTS.format(name)}, 400
         
@@ -38,14 +40,16 @@ class City(Resource):
         
         return item_schema.dump(item), 201
     
-    def delete(self, name):
+    @classmethod
+    def delete(cls, name):
         item = CityModel.find_by_name(name)
         if item:
             item.delete_from_db()
         
         return {'message': ITEM_DELETED.format(name)}
     
-    def put(self, name):
+    @classmethod
+    def put(cls, name):
         item_json = request.get_json()
         item = CityModel.find_by_name(name)
 
@@ -61,7 +65,8 @@ class City(Resource):
 
 class CityList(Resource):
 
-    def get(self):
+    @classmethod
+    def get(cls):
         items = item_list_schema.dump(CityModel.find_all())
         if items:
             return {'cities': items}, 200
