@@ -1,4 +1,8 @@
 from flask_restful import Resource, request
+from flask_jwt_extended import jwt_required
+# from flask_jwt_extended import get_jwt_identity
+# from flask_jwt_extended import jwt_optional
+
 
 from models.country import CountryModel
 from schemas.country import CountrySchema
@@ -12,15 +16,18 @@ item_schema = CountrySchema()
 item_list_schema = CountrySchema(many=True)
 
 class Country(Resource):
-    @classmethod
-    def get(cls, name):
+        
+    @classmethod    
+    @jwt_required()
+    def get(cls, name: str):
         item = CountryModel.find_by_name(name)
         if item:
             return item_schema.dump(item), 200
         return {'message': ITEM_NOT_FOUND}, 404
-    
+
     @classmethod
-    def post(cls, name):
+    # @jwt_required(fresh=True)
+    def post(cls, name: str):
         if CountryModel.find_by_name(name):
             return {'message': NAME_ALREADY_EXISTS.format(name)}, 400
         
@@ -42,17 +49,23 @@ class Country(Resource):
             return {'message': ERROR_INSERTING}, 500 
         
         return item_schema.dump(item), 201
-    
+        
     @classmethod
-    def delete(cls, name):
+    @jwt_required()
+    def delete(cls, name: str):
+        # claims = get_current_user()
+        # if not claims['is_admin']:
+        #     return {'message': 'Admin privilege required.'}, 401
+
         item = CountryModel.find_by_name(name)
         if item:
             item.delete_from_db()
         
         return {'message': ITEM_DELETED.format(name)}
-    
+
     @classmethod
-    def put(cls, name):
+    @jwt_required
+    def put(cls, name: str):
         item_json = request.get_json()
         item = CountryModel.find_by_name(name)
 
@@ -64,7 +77,7 @@ class Country(Resource):
             item.urban_pop = item_json['urban_pop']
         else:
             item_json['name'] = name
-            item = item_schema.load(item_json)       
+            item = item_schema.load(item_json)
       
         item.save_to_db()
         
@@ -73,6 +86,7 @@ class Country(Resource):
 class CountryList(Resource):
 
     @classmethod
+    @jwt_required(optional=True)
     def get(cls):
         items = item_list_schema.dump(CountryModel.find_all())
         if items:

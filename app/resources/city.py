@@ -1,4 +1,5 @@
 from flask_restful import Resource, request
+from flask_jwt_extended import jwt_required
 import logging
 
 from models.country import CountryModel
@@ -14,6 +15,7 @@ item_schema = CitySchema()
 item_list_schema = CitySchema(many=True)
 
 class City(Resource):
+
     @classmethod
     def get(cls, name):
         item = CityModel.find_by_name(name)
@@ -22,6 +24,7 @@ class City(Resource):
         return {'message': ITEM_NOT_FOUND}, 404
     
     @classmethod
+    # @jwt_required
     def post(cls, name):
         if CityModel.find_by_name(name):
             return {'message': NAME_ALREADY_EXISTS.format(name)}, 400
@@ -41,6 +44,7 @@ class City(Resource):
         return item_schema.dump(item), 201
     
     @classmethod
+    @jwt_required()
     def delete(cls, name):
         item = CityModel.find_by_name(name)
         if item:
@@ -49,6 +53,7 @@ class City(Resource):
         return {'message': ITEM_DELETED.format(name)}
     
     @classmethod
+    @jwt_required()
     def put(cls, name):
         item_json = request.get_json()
         item = CityModel.find_by_name(name)
