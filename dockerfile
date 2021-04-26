@@ -14,11 +14,11 @@ COPY ./requirements.txt /app
 RUN pip install -r requirements.txt
 
 ENV TZ Asia/Almaty
-ENV POSTGRES_USER="thror"
-ENV POSTGRES_PASSWORD="hammer"
-ENV POSTGRES_DATABASE="world"
-ENV POSTGRES_HOST="80.249.147.133"
-ENV POSTGRES_PORT="5434"
+ENV POSTGRES_USER=""
+ENV POSTGRES_PASSWORD=""
+ENV POSTGRES_DATABASE=""
+ENV POSTGRES_HOST=""
+ENV POSTGRES_PORT=""
 
 # RUN chown -R manu:manu ./
 # USER manu
