@@ -1,5 +1,5 @@
 from flask_restful import Resource, request
-from flask_jwt_extended import jwt_required
+# from flask_jwt_extended import jwt_required
 # from flask_jwt_extended import get_jwt_identity
 # from flask_jwt_extended import jwt_optional
 
@@ -18,7 +18,7 @@ item_list_schema = CountrySchema(many=True)
 class Country(Resource):
         
     @classmethod    
-    @jwt_required()
+    # @jwt_required()
     def get(cls, name: str):
         item = CountryModel.find_by_name(name)
         if item:
@@ -51,7 +51,7 @@ class Country(Resource):
         return item_schema.dump(item), 201
         
     @classmethod
-    @jwt_required()
+    # @jwt_required()
     def delete(cls, name: str):
         # claims = get_current_user()
         # if not claims['is_admin']:
@@ -64,7 +64,7 @@ class Country(Resource):
         return {'message': ITEM_DELETED.format(name)}
 
     @classmethod
-    @jwt_required
+    # @jwt_required
     def put(cls, name: str):
         item_json = request.get_json()
         item = CountryModel.find_by_name(name)
@@ -86,7 +86,7 @@ class Country(Resource):
 class CountryList(Resource):
 
     @classmethod
-    @jwt_required(optional=True)
+    # @jwt_required(optional=True)
     def get(cls):
         items = item_list_schema.dump(CountryModel.find_all())
         if items:

@@ -1,14 +1,14 @@
 from flask_restful import Resource
 from flask import request
 from werkzeug.security import safe_str_cmp
-from flask_jwt_extended import (
-    create_access_token,
-    create_refresh_token,
-    # jwt_refresh_token_required,
-    get_jwt_identity,
-    jwt_required,
-    # get_raw_jwt,
-)
+# from flask_jwt_extended import (
+#     create_access_token,
+#     create_refresh_token,
+#     # jwt_refresh_token_required,
+#     get_jwt_identity,
+#     jwt_required,
+#     # get_raw_jwt,
+# )
 
 from models.user import UserModel
 from schemas.user import UserSchema
@@ -79,7 +79,7 @@ class UserLogin(Resource):
 
 class TokenRefresh(Resource):
     @classmethod
-    @jwt_required(refresh=True)
+    # @jwt_required(refresh=True)
     def post(cls):
         current_user = get_jwt_identity()
         new_token = create_access_token(identity=current_user, fresh=False)

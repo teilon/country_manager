@@ -2,9 +2,7 @@ from flask import Flask
 from flask import jsonify
 
 from flask_restful import Api
-
-from flask_jwt_extended import JWTManager
-
+# from flask_jwt_extended import JWTManager
 from marshmallow import ValidationError
 
 from db import db, SQLALCHEMY_DATABASE_URI
@@ -25,7 +23,7 @@ app.config['JWT_SECRET_KEY'] = "writer"
 
 db.init_app(app)
 ma.init_app(app)
-jwt = JWTManager(app)
+# jwt = JWTManager(app)
 api = Api(app)
 
 @app.before_first_request
@@ -36,11 +34,11 @@ def create_tables():
 def handle_marshmallow_validation(err):
     return jsonify(err.messages), 400
 
-@jwt.additional_claims_loader
-def add_claims_to_jwt(identity):
-    if identity == 1:
-        return {'is_admin': True}
-    return {'is_admin': False}
+# @jwt.additional_claims_loader
+# def add_claims_to_jwt(identity):
+#     if identity == 1:
+#         return {'is_admin': True}
+#     return {'is_admin': False}
 
 # This method will check if a token is blacklisted, and will be called automatically when blacklist is enabled
 # @jwt.token_in_blacklist_loader

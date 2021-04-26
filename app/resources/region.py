@@ -1,5 +1,5 @@
 from flask_restful import Resource, request
-from flask_jwt_extended import jwt_required
+# from flask_jwt_extended import jwt_required
 import logging
 
 from models.country import CountryModel
@@ -44,7 +44,7 @@ class Region(Resource):
         return item_schema.dump(item), 201
     
     @classmethod
-    @jwt_required()
+    # @jwt_required()
     def delete(cls, name):
         item = RegionModel.find_by_name(name)
         if item:
@@ -53,7 +53,7 @@ class Region(Resource):
         return {'message': ITEM_DELETED.format(name)}
     
     @classmethod
-    @jwt_required()
+    # @jwt_required()
     def put(cls, name):
         item_json = request.get_json()
         item = RegionModel.find_by_name(name)
