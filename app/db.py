@@ -8,12 +8,6 @@ db = SQLAlchemy()
 # SQLITE_DATABASE = 'data.db'
 # SQLALCHEMY_DATABASE_URI = f'sqlite:///{SQLITE_DATABASE}'
 
-# POSTGRES_USER = "thror"
-# POSTGRES_PASSWORD = "hammer"
-# POSTGRES_DATABASE = "world"
-# POSTGRES_HOST = "80.249.147.133"
-# POSTGRES_PORT = "5434"
-
 POSTGRES_HOST = os.environ['POSTGRES_HOST']
 POSTGRES_PORT = os.environ['POSTGRES_PORT']
 POSTGRES_DATABASE = os.environ['POSTGRES_DATABASE']
@@ -26,9 +20,3 @@ SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.\
            POSTGRES_HOST,
            POSTGRES_PORT,
            POSTGRES_DATABASE)
-
-# POSTGRES_USER=thror
-# POSTGRES_PASSWORD=hammer
-# POSTGRES_DB=world
-# host='80.249.147.133'
-# port=5432
