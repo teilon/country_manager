@@ -12,22 +12,6 @@ class CityModel(db.Model):
     country_id = db.Column(db.Integer, db.ForeignKey('countries.id', onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     country = db.relationship('CountryModel', foreign_keys=country_id, cascade="all, delete")
 
-    # country = db.relationship("CountryModel",
-    #                 backref=backref("countries", cascade="all, delete-orphan")
-    #             )
-    # country = db.relationship("CountryModel", cascade="all, delete", backref="city", foreign_keys=country_id)
-    # reviews = db.relationship('Review', backref='user', cascade='all, delete, delete-orphan')
-
-    # order = relationship("Order",
-    #                 backref=backref("items", cascade="all, delete-orphan")
-    #             )
-    # __table_args__ = (
-    #     db.ForeignKeyConstraint(
-    #         ["fk_useraccess", "fk_useraccess_level"],
-    #         ["countries.id", "cities.country_id"],
-    #         ondelete="CASCADE"
-    #     )
-
 
     def __init__(self, name, population, country_id):
         self.name = name
